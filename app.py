@@ -4,17 +4,17 @@ import pandas as pd
 # ✅ Page config
 st.set_page_config(page_title="Test Case Prioritization", layout="wide")
 
-# ✅ FINAL UI FIX (dark outside + white inside)
+# ✅ FINAL DARK UI (no white boxes anywhere)
 st.markdown("""
 <style>
 
-/* Hide default header/footer */
+/* Hide default Streamlit header/footer */
 header {visibility: hidden;}
 footer {visibility: hidden;}
 
-/* 🌑 Dark background */
+/* 🌑 Full dark background */
 .stApp {
-    background: linear-gradient(to right, #0f172a, #1e293b);
+    background: linear-gradient(to right, #0f172a, #020617);
 }
 
 /* 🔥 Headings */
@@ -25,72 +25,68 @@ h1 {
 }
 
 h2, h3 {
-    color: #e5e7eb !important;
+    color: #e2e8f0 !important;
     font-weight: 700 !important;
 }
 
-/* Text outside */
-p, label {
-    color: #d1d5db !important;
+/* Normal text */
+p, label, span {
+    color: #cbd5f5 !important;
 }
 
-/* 📊 TABLE - white box + dark text */
+/* 📊 TABLE - DARK */
 [data-testid="stDataFrame"] {
-    background-color: white !important;
+    background-color: #020617 !important;
+    border: 1px solid #1e293b;
     border-radius: 10px;
 }
 
 [data-testid="stDataFrame"] div {
-    color: #111827 !important;
-    font-weight: 600;
+    color: #e2e8f0 !important;
+    font-weight: 500;
 }
 
-/* 📂 FILE UPLOADER - white box */
+/* 📂 FILE UPLOADER - DARK */
 section[data-testid="stFileUploader"] {
-    background-color: white !important;
-    border-radius: 10px;
-    padding: 12px;
+    background-color: #020617 !important;
+    border: 1px solid #334155;
+    border-radius: 12px;
+    padding: 15px;
 }
 
-/* 🔥 Fix uploader text + filename */
+/* Fix uploader text */
 section[data-testid="stFileUploader"] * {
-    color: #111827 !important;
-    font-weight: 600;
+    color: #e2e8f0 !important;
 }
 
-/* Specifically fix uploaded file name */
+/* Highlight uploaded file name */
 section[data-testid="stFileUploader"] span {
-    color: #111827 !important;
-    font-weight: 700 !important;
-}
-
-/* Inputs */
-input, textarea {
-    background-color: white !important;
-    color: black !important;
+    color: #38bdf8 !important;
+    font-weight: 700;
 }
 
 /* Buttons */
 .stButton>button {
-    background-color: #3b82f6;
+    background: linear-gradient(90deg, #3b82f6, #6366f1);
     color: white;
     border-radius: 10px;
     padding: 10px 18px;
     border: none;
+    font-weight: 600;
 }
 .stButton>button:hover {
-    background-color: #2563eb;
+    opacity: 0.9;
 }
 
 /* Download button */
 .stDownloadButton>button {
-    background-color: #10b981;
+    background: linear-gradient(90deg, #10b981, #22c55e);
     color: white;
 }
 
 /* Alerts */
 .stAlert {
-    color: white !important;
+    color: #e2e8f0 !important;
 }
 
 </style>
@@ -147,14 +143,14 @@ if uploaded_file:
         col2.metric("Max Score", round(df["Priority Score"].max(), 2))
         col3.metric("Min Score", round(df["Priority Score"].min(), 2))
 
-        # 🏆 Highlight
+        # 🏆 Top case
         st.success(f"🏆 Top Priority: {df.iloc[0]['Test Case']}")
 
         # 📋 Results
         st.markdown("## 🚀 Prioritized Results")
         st.dataframe(df, use_container_width=True)
 
-        # 📥 Download
+        # 📥 Download results
         csv = df.to_csv(index=False).encode('utf-8')
         st.download_button("📥 Download Results", csv, "results.csv")
 
