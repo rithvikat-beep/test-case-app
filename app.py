@@ -1,22 +1,17 @@
 import streamlit as st
 import pandas as pd
 
-# ✅ Page config
 st.set_page_config(page_title="Test Case Prioritization", layout="wide")
 
-# ✅ FINAL DARK UI — centered title, visible inputs & buttons
 st.markdown("""
 <style>
-/* Hide header/footer */
 header {visibility: hidden;}
 footer {visibility: hidden;}
 
-/* 🌑 App background */
 .stApp {
     background: linear-gradient(to right, #0f172a, #020617);
 }
 
-/* 📝 Headings — CENTERED */
 h1 {
     color: #ffffff !important;
     font-weight: 800 !important;
@@ -27,34 +22,85 @@ h2, h3 {
     font-weight: 800 !important;
 }
 
-/* Text */
 p, label, span, div {
     color: #e2e8f0 !important;
 }
 
-/* ───────────────────────────────────────────
-   🔍 Search / Text Input  — dark bg, white text
-─────────────────────────────────────────── */
-input[type="text"],
-input[type="search"],
-.stTextInput input,
-[data-testid="stTextInput"] input {
+/* ═══════════════════════════════════════════
+   🔍 DATAFRAME HOVER TOOLBAR
+   (Search + Fullscreen + Download icons)
+   Appears top-right when hovering a table
+═══════════════════════════════════════════ */
+
+/* Toolbar container */
+[data-testid="stElementToolbar"] {
     background-color: #1e293b !important;
-    color: #f1f5f9 !important;
     border: 1px solid #475569 !important;
     border-radius: 8px !important;
+    padding: 2px 4px !important;
+}
+
+/* Each icon button in the toolbar */
+[data-testid="stElementToolbarButton"] > button,
+[data-testid="stElementToolbar"] button {
+    background-color: #1e293b !important;
+    color: #f1f5f9 !important;
+    border: none !important;
+    border-radius: 6px !important;
+}
+
+[data-testid="stElementToolbarButton"] > button:hover,
+[data-testid="stElementToolbar"] button:hover {
+    background-color: #334155 !important;
+}
+
+/* SVG icons inside toolbar buttons — make them white */
+[data-testid="stElementToolbarButton"] svg,
+[data-testid="stElementToolbar"] svg {
+    fill: #f1f5f9 !important;
+    color: #f1f5f9 !important;
+}
+[data-testid="stElementToolbarButton"] svg path,
+[data-testid="stElementToolbar"] svg path,
+[data-testid="stElementToolbarButton"] svg rect,
+[data-testid="stElementToolbar"] svg rect {
+    fill: #f1f5f9 !important;
+    stroke: #f1f5f9 !important;
+}
+
+/* 🔍 Search INPUT that opens when clicking search icon */
+[data-testid="stElementToolbar"] input,
+[data-testid="stElementToolbarButton"] input,
+[data-testid="stDataFrame"] input[type="text"],
+[data-testid="stDataFrameResizable"] input[type="text"],
+input[aria-label="Search"],
+input[placeholder="Search…"],
+input[placeholder="Search"] {
+    background-color: #0f172a !important;
+    color: #f1f5f9 !important;
+    border: 1px solid #475569 !important;
+    border-radius: 6px !important;
     caret-color: #38bdf8 !important;
+    outline: none !important;
+}
+input[aria-label="Search"]::placeholder,
+input[placeholder="Search…"]::placeholder {
+    color: #64748b !important;
 }
 
-input[type="text"]::placeholder,
-input[type="search"]::placeholder,
-.stTextInput input::placeholder {
-    color: #94a3b8 !important;
+/* ═══════════════════════════════════════════
+   📊 FULLSCREEN MODAL — dark background
+═══════════════════════════════════════════ */
+[data-testid="stFullScreenFrame"],
+[data-testid="stFullScreenFrame"] > div,
+.fullscreen-container {
+    background-color: #0f172a !important;
+    color: #f1f5f9 !important;
 }
 
-/* ───────────────────────────────────────────
-   🔥 File Uploader — dark, no white boxes
-─────────────────────────────────────────── */
+/* ═══════════════════════════════════════════
+   🔥 File Uploader
+═══════════════════════════════════════════ */
 .stFileUploader,
 [data-testid="stFileUploader"],
 [data-testid="stFileUploader"] > div,
@@ -77,7 +123,6 @@ input[type="search"]::placeholder,
     font-weight: 600 !important;
 }
 
-/* Browse files button inside uploader */
 [data-testid="stFileUploaderDropzone"] button {
     background-color: #1e293b !important;
     color: #f1f5f9 !important;
@@ -85,17 +130,19 @@ input[type="search"]::placeholder,
     border-radius: 8px !important;
 }
 
-/* ───────────────────────────────────────────
-   📊 DataFrame / Table
-─────────────────────────────────────────── */
-[data-testid="stDataFrame"] {
-    background-color: #020617 !important;
-    color: white !important;
+/* ═══════════════════════════════════════════
+   📊 DataFrame table
+═══════════════════════════════════════════ */
+[data-testid="stDataFrame"],
+[data-testid="stDataFrameResizable"] {
+    background-color: #0f172a !important;
+    border-radius: 10px !important;
+    overflow: hidden !important;
 }
 
-/* ───────────────────────────────────────────
-   🔘 Generic Buttons (Prioritize, etc.)
-─────────────────────────────────────────── */
+/* ═══════════════════════════════════════════
+   🔘 Buttons
+═══════════════════════════════════════════ */
 .stButton > button {
     background: linear-gradient(90deg, #3b82f6, #6366f1) !important;
     color: #ffffff !important;
@@ -103,20 +150,14 @@ input[type="search"]::placeholder,
     border-radius: 10px !important;
     font-weight: 600 !important;
 }
-.stButton > button:hover {
-    opacity: 0.9;
-}
+.stButton > button:hover { opacity: 0.9; }
 
-/* Secondary / outline buttons */
 button[kind="secondary"] {
     background-color: #1e293b !important;
     color: #f1f5f9 !important;
     border: 1px solid #475569 !important;
 }
 
-/* ───────────────────────────────────────────
-   📥 Download Buttons
-─────────────────────────────────────────── */
 .stDownloadButton > button {
     background: linear-gradient(90deg, #10b981, #22c55e) !important;
     color: #ffffff !important;
@@ -125,25 +166,21 @@ button[kind="secondary"] {
     font-weight: 600 !important;
 }
 
-/* ───────────────────────────────────────────
+/* ═══════════════════════════════════════════
    📊 Metric cards
-─────────────────────────────────────────── */
+═══════════════════════════════════════════ */
 [data-testid="stMetric"] {
     background-color: #1e293b !important;
     border-radius: 12px !important;
     padding: 16px !important;
     border: 1px solid #334155 !important;
 }
-[data-testid="stMetricLabel"] {
-    color: #94a3b8 !important;
-}
-[data-testid="stMetricValue"] {
-    color: #f1f5f9 !important;
-}
+[data-testid="stMetricLabel"] { color: #94a3b8 !important; }
+[data-testid="stMetricValue"] { color: #f1f5f9 !important; }
 
-/* ───────────────────────────────────────────
-   ✅ Info / Success / Error boxes
-─────────────────────────────────────────── */
+/* ═══════════════════════════════════════════
+   ✅ Alerts
+═══════════════════════════════════════════ */
 [data-testid="stAlert"] {
     background-color: #1e293b !important;
     border-radius: 10px !important;
@@ -152,7 +189,7 @@ button[kind="secondary"] {
 </style>
 """, unsafe_allow_html=True)
 
-# 🎯 Title — centered via CSS above
+# 🎯 Title
 st.markdown("<h1>🧪 Test Case Prioritization System</h1>", unsafe_allow_html=True)
 st.markdown("<p style='text-align:center;'>Upload your CSV or follow the sample format below</p>", unsafe_allow_html=True)
 
@@ -167,15 +204,12 @@ sample_data = pd.DataFrame({
 st.markdown("## 📌 Sample CSV Format")
 st.dataframe(sample_data, use_container_width=True)
 
-# 📥 Download sample
 csv_sample = sample_data.to_csv(index=False).encode('utf-8')
 st.download_button("📥 Download Sample CSV", csv_sample, "sample.csv")
 
-# 📂 Upload
 st.markdown("## 📂 Upload Your CSV")
 uploaded_file = st.file_uploader("Choose CSV file", type=["csv"])
 
-# 🚀 Processing
 if uploaded_file:
     df = pd.read_csv(uploaded_file)
     st.markdown("## 📊 Uploaded Data")
@@ -183,8 +217,6 @@ if uploaded_file:
 
     required_cols = ["Execution Time", "Failure History", "Coverage"]
     if all(col in df.columns for col in required_cols):
-
-        # 🎯 Priority calculation
         df["Priority Score"] = (
             0.5 * df["Failure History"] +
             0.3 * df["Coverage"] -
@@ -192,21 +224,17 @@ if uploaded_file:
         )
         df = df.sort_values(by="Priority Score", ascending=False)
 
-        # 📊 Metrics
         st.markdown("## 📈 Summary")
         col1, col2, col3 = st.columns(3)
         col1.metric("Total Cases", len(df))
         col2.metric("Max Score", round(df["Priority Score"].max(), 2))
         col3.metric("Min Score", round(df["Priority Score"].min(), 2))
 
-        # 🏆 Top case
         st.success(f"🏆 Top Priority: {df.iloc[0]['Test Case']}")
 
-        # 📋 Results
         st.markdown("## 🚀 Prioritized Results")
         st.dataframe(df, use_container_width=True)
 
-        # 📥 Download results
         csv = df.to_csv(index=False).encode('utf-8')
         st.download_button("📥 Download Results", csv, "results.csv")
     else:
