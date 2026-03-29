@@ -1,86 +1,127 @@
 import streamlit as st
 import pandas as pd
 
-# Page settings
+# ✅ Page config
 st.set_page_config(page_title="Test Case Prioritization", layout="wide")
 
-# Custom CSS (🔥 UI upgrade)
+# ✅ Dark UI + styling
 st.markdown("""
 <style>
-.main {
-    background: linear-gradient(to right, #667eea, #764ba2);
-}
-.title {
-    text-align: center;
+/* Hide default header/footer */
+header {visibility: hidden;}
+footer {visibility: hidden;}
+
+/* Background */
+.stApp {
+    background: linear-gradient(to right, #0f172a, #1e293b);
     color: white;
-    font-size: 40px;
-    font-weight: bold;
 }
-.subtitle {
-    text-align: center;
-    color: #f0f0f0;
-    margin-bottom: 30px;
+
+/* Text */
+h1, h2, h3, h4, h5, h6, p, div {
+    color: white !important;
 }
+
+/* Card style */
 .card {
-    background: white;
+    background-color: #1e293b;
     padding: 20px;
     border-radius: 12px;
-    box-shadow: 0px 6px 20px rgba(0,0,0,0.2);
+    box-shadow: 0px 6px 20px rgba(0,0,0,0.3);
+}
+
+/* Buttons */
+.stButton>button {
+    background-color: #3b82f6;
+    color: white;
+    border-radius: 10px;
+    padding: 10px 18px;
+    font-size: 16px;
+    border: none;
+}
+.stButton>button:hover {
+    background-color: #2563eb;
+}
+
+/* File uploader */
+.stFileUploader {
+    background-color: #111827;
+    padding: 15px;
+    border-radius: 10px;
+}
+
+/* Table */
+.stDataFrame {
+    background-color: #111827;
 }
 </style>
 """, unsafe_allow_html=True)
 
-# Title
-st.markdown('<p class="title">🧪 Test Case Prioritization</p>', unsafe_allow_html=True)
-st.markdown('<p class="subtitle">Upload CSV & analyze test cases intelligently</p>', unsafe_allow_html=True)
+# 🎯 Title
+st.markdown("<h1 style='text-align:center;'>🧪 Test Case Prioritization System</h1>", unsafe_allow_html=True)
+st.markdown("<p style='text-align:center;'>Upload your dataset or follow the sample format below</p>", unsafe_allow_html=True)
 
-# Upload section
-with st.container():
-    st.markdown('<div class="card">', unsafe_allow_html=True)
-    file = st.file_uploader("📂 Upload CSV File", type=["csv"])
-    st.markdown('</div>', unsafe_allow_html=True)
+# 📌 Sample Data
+sample_data = pd.DataFrame({
+    "Test Case": ["Login", "Signup", "Payment"],
+    "Execution Time": [5, 4, 6],
+    "Failure History": [3, 1, 5],
+    "Coverage": [80, 70, 90]
+})
 
-# Processing
-if file is not None:
-    try:
-        df = pd.read_csv(file)
+st.markdown("### 📌 Sample CSV Format")
+st.dataframe(sample_data, use_container_width=True)
 
-        required_cols = ["test_case", "execution_time", "failure_history", "coverage"]
-        missing = [col for col in required_cols if col not in df.columns]
+# 📥 Download sample
+csv_sample = sample_data.to_csv(index=False).encode('utf-8')
+st.download_button("📥 Download Sample CSV", csv_sample, "sample.csv")
 
-        if missing:
-            st.error(f"❌ Missing columns: {', '.join(missing)}")
-        else:
-            df["priority_score"] = (
-                df["failure_history"] * 0.5 +
-                df["coverage"] * 0.3 -
-                df["execution_time"] * 0.2
-            )
+# 📂 Upload
+st.markdown("### 📂 Upload Your CSV")
+uploaded_file = st.file_uploader("Choose CSV file", type=["csv"])
 
-            df = df.sort_values(by="priority_score", ascending=False)
+# 🚀 Process
+if uploaded_file:
+    df = pd.read_csv(uploaded_file)
 
-            # Metrics (🔥 looks professional)
-            st.markdown("### 📊 Summary")
-            col1, col2, col3 = st.columns(3)
+    st.markdown("### 📊 Uploaded Data")
+    st.dataframe(df, use_container_width=True)
 
-            col1.metric("Total Test Cases", len(df))
-            col2.metric("Top Priority Score", round(df["priority_score"].max(), 2))
-            col3.metric("Lowest Priority Score", round(df["priority_score"].min(), 2))
+    required_cols = ["Execution Time", "Failure History", "Coverage"]
 
-            # Table
-            st.markdown("### 📋 Prioritized Results")
-            st.dataframe(df, use_container_width=True)
+    if all(col in df.columns for col in required_cols):
 
-            # Download button (🔥 extra marks)
-            csv = df.to_csv(index=False).encode('utf-8')
-            st.download_button(
-                "📥 Download Results",
-                csv,
-                "prioritized_test_cases.csv",
-                "text/csv"
-            )
+        # 🎯 Priority calculation
+        df["Priority Score"] = (
+            0.5 * df["Failure History"] +
+            0.3 * df["Coverage"] -
+            0.2 * df["Execution Time"]
+        )
 
-            st.success("✅ Analysis Completed Successfully")
+        df = df.sort_values(by="Priority Score", ascending=False)
 
-    except Exception as e:
-        st.error(f"⚠️ Error: {str(e)}")
+        # 📊 Metrics
+        st.markdown("### 📈 Summary")
+        col1, col2, col3 = st.columns(3)
+
+        col1.metric("Total Test Cases", len(df))
+        col2.metric("Max Score", round(df["Priority Score"].max(), 2))
+        col3.metric("Min Score", round(df["Priority Score"].min(), 2))
+
+        # 🏆 Highlight top test case
+        top_case = df.iloc[0]["Test Case"]
+        st.success(f"🏆 Top Priority Test Case: {top_case}")
+
+        # 📋 Results
+        st.markdown("### 🚀 Prioritized Results")
+        st.dataframe(df, use_container_width=True)
+
+        # 📥 Download results
+        csv = df.to_csv(index=False).encode('utf-8')
+        st.download_button("📥 Download Results", csv, "prioritized_results.csv")
+
+    else:
+        st.error("❌ CSV must contain: Execution Time, Failure History, Coverage")
+
+else:
+    st.info("👆 Upload your CSV file to begin")
