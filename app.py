@@ -143,10 +143,10 @@ st.markdown("<p style='text-align:center;'>Upload your CSV or follow the sample 
 
 # ─── Sample Data ─────────────────────────────────
 sample_data = pd.DataFrame({
-    "Test Case": ["Login", "Signup", "Payment"],
-    "Execution Time": [5, 4, 6],
-    "Failure History": [3, 1, 5],
-    "Coverage": [80, 70, 90]
+    "test_case": ["Login_Test", "Signup_Test", "Payment_Test", "Search_Test", "Profile_Update"],
+    "execution_time": [5, 4, 6, 3, 4],
+    "failure_history": [3, 1, 5, 0, 2],
+    "coverage": [85, 70, 90, 60, 75]
 })
 
 st.markdown("## 📌 Sample CSV Format")
@@ -164,12 +164,12 @@ if uploaded_file:
     st.markdown("## 📊 Uploaded Data")
     show_table(df, "Uploaded Data")
 
-    required_cols = ["Execution Time", "Failure History", "Coverage"]
+    required_cols = ["execution_time", "failure_history", "coverage"]
     if all(col in df.columns for col in required_cols):
         df["Priority Score"] = (
-            0.5 * df["Failure History"] +
-            0.3 * df["Coverage"] -
-            0.2 * df["Execution Time"]
+            0.5 * df["failure_history"] +
+            0.3 * df["coverage"] -
+            0.2 * df["execution_time"]
         )
         df = df.sort_values(by="Priority Score", ascending=False)
 
@@ -179,7 +179,7 @@ if uploaded_file:
         col2.metric("Max Score", round(df["Priority Score"].max(), 2))
         col3.metric("Min Score", round(df["Priority Score"].min(), 2))
 
-        st.success(f"🏆 Top Priority: {df.iloc[0]['Test Case']}")
+        st.success(f"🏆 Top Priority: {df.iloc[0]['test_case']}")
 
         st.markdown("## 🚀 Prioritized Results")
         show_table(df, "Prioritized Results")
@@ -187,6 +187,6 @@ if uploaded_file:
         csv = df.to_csv(index=False).encode('utf-8')
         st.download_button("📥 Download Results", csv, "results.csv")
     else:
-        st.error("❌ CSV must contain: Execution Time, Failure History, Coverage")
+        st.error("❌ CSV must contain: execution_time, failure_history, coverage")
 else:
     st.info("👆 Upload your CSV file to begin")
