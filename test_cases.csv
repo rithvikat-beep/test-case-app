@@ -1,0 +1,6 @@
+test_case,execution_time,failure_history,coverage
+Login_Test,5,3,85
+Signup_Test,4,1,70
+Payment_Test,6,5,90
+Search_Test,3,0,60
+Profile_Update,4,2,75
