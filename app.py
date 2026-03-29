@@ -26,81 +26,12 @@ p, label, span, div {
     color: #e2e8f0 !important;
 }
 
-/* ═══════════════════════════════════════════
-   🔍 DATAFRAME HOVER TOOLBAR
-   (Search + Fullscreen + Download icons)
-   Appears top-right when hovering a table
-═══════════════════════════════════════════ */
-
-/* Toolbar container */
+/* Hide Streamlit's built-in dataframe toolbar completely */
 [data-testid="stElementToolbar"] {
-    background-color: #1e293b !important;
-    border: 1px solid #475569 !important;
-    border-radius: 8px !important;
-    padding: 2px 4px !important;
+    display: none !important;
 }
 
-/* Each icon button in the toolbar */
-[data-testid="stElementToolbarButton"] > button,
-[data-testid="stElementToolbar"] button {
-    background-color: #1e293b !important;
-    color: #f1f5f9 !important;
-    border: none !important;
-    border-radius: 6px !important;
-}
-
-[data-testid="stElementToolbarButton"] > button:hover,
-[data-testid="stElementToolbar"] button:hover {
-    background-color: #334155 !important;
-}
-
-/* SVG icons inside toolbar buttons — make them white */
-[data-testid="stElementToolbarButton"] svg,
-[data-testid="stElementToolbar"] svg {
-    fill: #f1f5f9 !important;
-    color: #f1f5f9 !important;
-}
-[data-testid="stElementToolbarButton"] svg path,
-[data-testid="stElementToolbar"] svg path,
-[data-testid="stElementToolbarButton"] svg rect,
-[data-testid="stElementToolbar"] svg rect {
-    fill: #f1f5f9 !important;
-    stroke: #f1f5f9 !important;
-}
-
-/* 🔍 Search INPUT that opens when clicking search icon */
-[data-testid="stElementToolbar"] input,
-[data-testid="stElementToolbarButton"] input,
-[data-testid="stDataFrame"] input[type="text"],
-[data-testid="stDataFrameResizable"] input[type="text"],
-input[aria-label="Search"],
-input[placeholder="Search…"],
-input[placeholder="Search"] {
-    background-color: #0f172a !important;
-    color: #f1f5f9 !important;
-    border: 1px solid #475569 !important;
-    border-radius: 6px !important;
-    caret-color: #38bdf8 !important;
-    outline: none !important;
-}
-input[aria-label="Search"]::placeholder,
-input[placeholder="Search…"]::placeholder {
-    color: #64748b !important;
-}
-
-/* ═══════════════════════════════════════════
-   📊 FULLSCREEN MODAL — dark background
-═══════════════════════════════════════════ */
-[data-testid="stFullScreenFrame"],
-[data-testid="stFullScreenFrame"] > div,
-.fullscreen-container {
-    background-color: #0f172a !important;
-    color: #f1f5f9 !important;
-}
-
-/* ═══════════════════════════════════════════
-   🔥 File Uploader
-═══════════════════════════════════════════ */
+/* File Uploader */
 .stFileUploader,
 [data-testid="stFileUploader"],
 [data-testid="stFileUploader"] > div,
@@ -109,20 +40,17 @@ input[placeholder="Search…"]::placeholder {
     border: 1px solid #334155 !important;
     border-radius: 12px !important;
 }
-
 [data-testid="stFileUploaderDropzone"] {
     background-color: #0f172a !important;
     color: #e2e8f0 !important;
     border: 2px dashed #475569 !important;
     border-radius: 12px !important;
 }
-
 [data-testid="stFileUploader"] small,
 [data-testid="stFileUploader"] span {
     color: #38bdf8 !important;
     font-weight: 600 !important;
 }
-
 [data-testid="stFileUploaderDropzone"] button {
     background-color: #1e293b !important;
     color: #f1f5f9 !important;
@@ -130,19 +58,26 @@ input[placeholder="Search…"]::placeholder {
     border-radius: 8px !important;
 }
 
-/* ═══════════════════════════════════════════
-   📊 DataFrame table
-═══════════════════════════════════════════ */
+/* Search input */
+.stTextInput input {
+    background-color: #1e293b !important;
+    color: #f1f5f9 !important;
+    border: 1px solid #475569 !important;
+    border-radius: 8px !important;
+    caret-color: #38bdf8 !important;
+}
+.stTextInput input::placeholder {
+    color: #64748b !important;
+}
+
+/* DataFrame */
 [data-testid="stDataFrame"],
 [data-testid="stDataFrameResizable"] {
     background-color: #0f172a !important;
     border-radius: 10px !important;
-    overflow: hidden !important;
 }
 
-/* ═══════════════════════════════════════════
-   🔘 Buttons
-═══════════════════════════════════════════ */
+/* Buttons */
 .stButton > button {
     background: linear-gradient(90deg, #3b82f6, #6366f1) !important;
     color: #ffffff !important;
@@ -152,12 +87,6 @@ input[placeholder="Search…"]::placeholder {
 }
 .stButton > button:hover { opacity: 0.9; }
 
-button[kind="secondary"] {
-    background-color: #1e293b !important;
-    color: #f1f5f9 !important;
-    border: 1px solid #475569 !important;
-}
-
 .stDownloadButton > button {
     background: linear-gradient(90deg, #10b981, #22c55e) !important;
     color: #ffffff !important;
@@ -166,9 +95,7 @@ button[kind="secondary"] {
     font-weight: 600 !important;
 }
 
-/* ═══════════════════════════════════════════
-   📊 Metric cards
-═══════════════════════════════════════════ */
+/* Metric cards */
 [data-testid="stMetric"] {
     background-color: #1e293b !important;
     border-radius: 12px !important;
@@ -178,9 +105,7 @@ button[kind="secondary"] {
 [data-testid="stMetricLabel"] { color: #94a3b8 !important; }
 [data-testid="stMetricValue"] { color: #f1f5f9 !important; }
 
-/* ═══════════════════════════════════════════
-   ✅ Alerts
-═══════════════════════════════════════════ */
+/* Alerts */
 [data-testid="stAlert"] {
     background-color: #1e293b !important;
     border-radius: 10px !important;
@@ -189,11 +114,34 @@ button[kind="secondary"] {
 </style>
 """, unsafe_allow_html=True)
 
-# 🎯 Title
+
+def show_table(df, label=""):
+    """Show dataframe with custom Search + Expand controls."""
+    st.markdown(f"#### {label}" if label else "", unsafe_allow_html=True)
+
+    # Controls row: Search + Expand
+    col_search, col_expand = st.columns([5, 1])
+    with col_search:
+        search = st.text_input("", placeholder="🔍 Search...", key=f"search_{label}", label_visibility="collapsed")
+    with col_expand:
+        expand = st.toggle("⛶ Expand", key=f"expand_{label}")
+
+    # Filter rows
+    filtered = df.copy()
+    if search:
+        mask = df.apply(lambda row: row.astype(str).str.contains(search, case=False).any(), axis=1)
+        filtered = df[mask]
+
+    # Show table — tall if expanded
+    height = 600 if expand else 250
+    st.dataframe(filtered, use_container_width=True, height=height)
+
+
+# ─── Title ───────────────────────────────────────
 st.markdown("<h1>🧪 Test Case Prioritization System</h1>", unsafe_allow_html=True)
 st.markdown("<p style='text-align:center;'>Upload your CSV or follow the sample format below</p>", unsafe_allow_html=True)
 
-# 📌 Sample Data
+# ─── Sample Data ─────────────────────────────────
 sample_data = pd.DataFrame({
     "Test Case": ["Login", "Signup", "Payment"],
     "Execution Time": [5, 4, 6],
@@ -202,18 +150,19 @@ sample_data = pd.DataFrame({
 })
 
 st.markdown("## 📌 Sample CSV Format")
-st.dataframe(sample_data, use_container_width=True)
+show_table(sample_data, "Sample Data")
 
 csv_sample = sample_data.to_csv(index=False).encode('utf-8')
 st.download_button("📥 Download Sample CSV", csv_sample, "sample.csv")
 
+# ─── Upload ──────────────────────────────────────
 st.markdown("## 📂 Upload Your CSV")
 uploaded_file = st.file_uploader("Choose CSV file", type=["csv"])
 
 if uploaded_file:
     df = pd.read_csv(uploaded_file)
     st.markdown("## 📊 Uploaded Data")
-    st.dataframe(df, use_container_width=True)
+    show_table(df, "Uploaded Data")
 
     required_cols = ["Execution Time", "Failure History", "Coverage"]
     if all(col in df.columns for col in required_cols):
@@ -233,7 +182,7 @@ if uploaded_file:
         st.success(f"🏆 Top Priority: {df.iloc[0]['Test Case']}")
 
         st.markdown("## 🚀 Prioritized Results")
-        st.dataframe(df, use_container_width=True)
+        show_table(df, "Prioritized Results")
 
         csv = df.to_csv(index=False).encode('utf-8')
         st.download_button("📥 Download Results", csv, "results.csv")
