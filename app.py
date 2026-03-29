@@ -8,61 +8,60 @@ st.set_page_config(page_title="Test Case Prioritization", layout="wide")
 st.markdown("""
 <style>
 
-/* Hide default Streamlit header/footer */
+/* Hide header/footer */
 header {visibility: hidden;}
 footer {visibility: hidden;}
 
-/* 🌑 Full dark background */
+/* 🌑 App background */
 .stApp {
     background: linear-gradient(to right, #0f172a, #020617);
 }
 
-/* 🔥 Headings */
-h1 {
+/* 📝 Headings */
+h1, h2, h3 {
     color: #ffffff !important;
     font-weight: 800 !important;
-    text-align: center;
 }
 
-h2, h3 {
+/* Text */
+p, label, span, div {
     color: #e2e8f0 !important;
-    font-weight: 700 !important;
 }
 
-/* Normal text */
-p, label, span {
-    color: #cbd5f5 !important;
+/* 🔥 REMOVE ALL WHITE BACKGROUNDS */
+.stFileUploader,
+[data-testid="stFileUploader"],
+[data-testid="stFileUploader"] > div,
+[data-testid="stFileUploader"] section {
+    background-color: #020617 !important;
+    border: 1px solid #334155 !important;
+    border-radius: 12px;
 }
 
-/* 📊 TABLE - DARK */
+/* Drag & drop area */
+[data-testid="stFileUploaderDropzone"] {
+    background-color: #020617 !important;
+    color: #e2e8f0 !important;
+    border: 2px dashed #475569 !important;
+}
+
+/* Uploaded file name */
+[data-testid="stFileUploader"] small,
+[data-testid="stFileUploader"] span {
+    color: #38bdf8 !important;
+    font-weight: 600 !important;
+}
+
+/* Fix browse button */
+button[kind="secondary"] {
+    background-color: #1e293b !important;
+    color: white !important;
+}
+
+/* 📊 Table */
 [data-testid="stDataFrame"] {
     background-color: #020617 !important;
-    border: 1px solid #1e293b;
-    border-radius: 10px;
-}
-
-[data-testid="stDataFrame"] div {
-    color: #e2e8f0 !important;
-    font-weight: 500;
-}
-
-/* 📂 FILE UPLOADER - DARK */
-section[data-testid="stFileUploader"] {
-    background-color: #020617 !important;
-    border: 1px solid #334155;
-    border-radius: 12px;
-    padding: 15px;
-}
-
-/* Fix uploader text */
-section[data-testid="stFileUploader"] * {
-    color: #e2e8f0 !important;
-}
-
-/* Highlight uploaded file name */
-section[data-testid="stFileUploader"] span {
-    color: #38bdf8 !important;
-    font-weight: 700;
+    color: white !important;
 }
 
 /* Buttons */
@@ -70,23 +69,13 @@ section[data-testid="stFileUploader"] span {
     background: linear-gradient(90deg, #3b82f6, #6366f1);
     color: white;
     border-radius: 10px;
-    padding: 10px 18px;
-    border: none;
     font-weight: 600;
-}
-.stButton>button:hover {
-    opacity: 0.9;
 }
 
 /* Download button */
 .stDownloadButton>button {
     background: linear-gradient(90deg, #10b981, #22c55e);
     color: white;
-}
-
-/* Alerts */
-.stAlert {
-    color: #e2e8f0 !important;
 }
 
 </style>
