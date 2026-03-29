@@ -4,30 +4,42 @@ import pandas as pd
 # ✅ Page config
 st.set_page_config(page_title="Test Case Prioritization", layout="wide")
 
-# ✅ DARK UI FIX (no white text issue)
+# ✅ FULL DARK UI + HEADING FIX
 st.markdown("""
 <style>
 
-/* Hide header/footer */
+/* Hide default Streamlit header/footer */
 header {visibility: hidden;}
 footer {visibility: hidden;}
 
-/* App background */
+/* Background */
 .stApp {
     background: linear-gradient(to right, #0f172a, #1e293b);
 }
 
-/* Headings */
-h1, h2, h3 {
-    color: white;
+/* 🔥 Bright headings */
+h1 {
+    color: #ffffff !important;
+    font-weight: 800 !important;
+    text-align: center;
+}
+
+h2 {
+    color: #f9fafb !important;
+    font-weight: 700 !important;
+}
+
+h3 {
+    color: #e5e7eb !important;
+    font-weight: 600 !important;
 }
 
 /* Normal text */
 p, label {
-    color: #e5e7eb !important;
+    color: #d1d5db !important;
 }
 
-/* Table fix */
+/* DataFrame fix */
 [data-testid="stDataFrame"] {
     background-color: #111827 !important;
 }
@@ -36,11 +48,11 @@ p, label {
     color: #e5e7eb !important;
 }
 
-/* File uploader fix */
+/* File uploader */
 section[data-testid="stFileUploader"] {
     background-color: #111827;
     border-radius: 10px;
-    padding: 10px;
+    padding: 12px;
 }
 
 section[data-testid="stFileUploader"] * {
@@ -66,7 +78,7 @@ section[data-testid="stFileUploader"] * {
     color: white;
 }
 
-/* Info / alert */
+/* Alerts */
 .stAlert {
     color: white !important;
 }
@@ -75,8 +87,8 @@ section[data-testid="stFileUploader"] * {
 """, unsafe_allow_html=True)
 
 # 🎯 Title
-st.markdown("<h1 style='text-align:center;'>🧪 Test Case Prioritization System</h1>", unsafe_allow_html=True)
-st.markdown("<p style='text-align:center;'>Upload your CSV or follow the sample format</p>", unsafe_allow_html=True)
+st.markdown("<h1>🧪 Test Case Prioritization System</h1>", unsafe_allow_html=True)
+st.markdown("<p style='text-align:center;'>Upload your CSV or follow the sample format below</p>", unsafe_allow_html=True)
 
 # 📌 Sample Data
 sample_data = pd.DataFrame({
@@ -86,7 +98,7 @@ sample_data = pd.DataFrame({
     "Coverage": [80, 70, 90]
 })
 
-st.markdown("### 📌 Sample CSV Format")
+st.markdown("## 📌 Sample CSV Format")
 st.dataframe(sample_data, use_container_width=True)
 
 # 📥 Download sample
@@ -94,14 +106,14 @@ csv_sample = sample_data.to_csv(index=False).encode('utf-8')
 st.download_button("📥 Download Sample CSV", csv_sample, "sample.csv")
 
 # 📂 Upload
-st.markdown("### 📂 Upload Your CSV")
+st.markdown("## 📂 Upload Your CSV")
 uploaded_file = st.file_uploader("Choose CSV file", type=["csv"])
 
 # 🚀 Processing
 if uploaded_file:
     df = pd.read_csv(uploaded_file)
 
-    st.markdown("### 📊 Uploaded Data")
+    st.markdown("## 📊 Uploaded Data")
     st.dataframe(df, use_container_width=True)
 
     required_cols = ["Execution Time", "Failure History", "Coverage"]
@@ -117,22 +129,22 @@ if uploaded_file:
 
         df = df.sort_values(by="Priority Score", ascending=False)
 
-        # Metrics
-        st.markdown("### 📈 Summary")
+        # 📊 Metrics
+        st.markdown("## 📈 Summary")
         col1, col2, col3 = st.columns(3)
 
         col1.metric("Total Cases", len(df))
         col2.metric("Max Score", round(df["Priority Score"].max(), 2))
         col3.metric("Min Score", round(df["Priority Score"].min(), 2))
 
-        # Top case
+        # 🏆 Highlight
         st.success(f"🏆 Top Priority: {df.iloc[0]['Test Case']}")
 
         # Results
-        st.markdown("### 🚀 Prioritized Results")
+        st.markdown("## 🚀 Prioritized Results")
         st.dataframe(df, use_container_width=True)
 
-        # Download results
+        # Download
         csv = df.to_csv(index=False).encode('utf-8')
         st.download_button("📥 Download Results", csv, "results.csv")
 
