@@ -115,6 +115,14 @@ p, label, span, div {
 """, unsafe_allow_html=True)
 
 
+def parse_execution_time(value):
+    """Convert execution_time values like 4.14, 2.5, 10.3 to float."""
+    try:
+        return float(str(value).strip())
+    except (ValueError, TypeError):
+        return None
+
+
 def show_table(df, label=""):
     """Show dataframe with custom Search + Expand controls."""
     st.markdown(f"#### {label}" if label else "", unsafe_allow_html=True)
@@ -144,7 +152,7 @@ st.markdown("<p style='text-align:center;'>Upload your CSV or follow the sample 
 # ─── Sample Data ─────────────────────────────────
 sample_data = pd.DataFrame({
     "test_case": ["Login_Test", "Signup_Test", "Payment_Test", "Search_Test", "Profile_Update"],
-    "execution_time": [5, 4, 6, 3, 4],
+    "execution_time": [5.14, 4.22, 6.08, 3.75, 4.50],
     "failure_history": [3, 1, 5, 0, 2],
     "coverage": [85, 70, 90, 60, 75]
 })
@@ -166,10 +174,18 @@ if uploaded_file:
 
     required_cols = ["execution_time", "failure_history", "coverage"]
     if all(col in df.columns for col in required_cols):
+        # Parse execution_time — handles "4.14 sec", "5sec", "3.5s", or plain numbers
+        df["execution_time_sec"] = df["execution_time"].apply(parse_execution_time)
+
+        invalid = df["execution_time_sec"].isnull().sum()
+        if invalid > 0:
+            st.warning(f"⚠️ {invalid} row(s) had unreadable execution_time values and were skipped.")
+            df = df.dropna(subset=["execution_time_sec"])
+
         df["Priority Score"] = (
             0.5 * df["failure_history"] +
             0.3 * df["coverage"] -
-            0.2 * df["execution_time"]
+            0.2 * df["execution_time_sec"]
         )
         df = df.sort_values(by="Priority Score", ascending=False)
 
